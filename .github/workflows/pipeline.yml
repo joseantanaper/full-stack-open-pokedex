@@ -53,3 +53,4 @@ jobs:
           WITH_V: true
           DRY_RUN: true
           VERBOSE: true
+          PRERELEASE: true
