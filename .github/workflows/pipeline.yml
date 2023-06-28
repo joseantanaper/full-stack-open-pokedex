@@ -9,15 +9,35 @@ on:
       RENDER_API_KEY:
         description: 'RENDER_API_KEY'
         required: true
-      
+      DISCORD_WEBHOOK:
+        description: 'DISCORD_WEBHOOK'
+        required: true
+
   push:
     branches:
       - master
+
   pull_request:
     branches: [master]
     types: [opened, synchronize]
 
 jobs:
+
+  discord_notification:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: New release!
+      uses: rjstone/discord-webhook-notify@v1
+      with:
+        severity: info
+        details: New release details.
+        webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+    - name: Release with failures
+      uses: rjstone/discord-webhook-notify@v1
+      with:
+        severity: error
+        details: Error
+        webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
   simple_deployment_pipeline:
     runs-on: ubuntu-20.04
