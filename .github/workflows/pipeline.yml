@@ -43,7 +43,7 @@ jobs:
           wait-on: http://localhost:5000
       - uses: actions/checkout@v3
       - name: Trigger deployment
-        if: ${{ github.event_name == 'push' }} && ${{ contains( toJson(github.event.pull_request.body), '#skip' ) != true }}
+        if: ${{ github.event_name == 'push' && contains( toJson(github.event.pull_request.body), '#skip' ) != true }}
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
 
   github_context:
