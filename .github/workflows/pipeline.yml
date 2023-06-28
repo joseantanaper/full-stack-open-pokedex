@@ -108,17 +108,17 @@ jobs:
       - name: Trigger deployment
         if: ${{ github.event_name == 'push' }} && ${{ contains( toJson(github.event.pull_request.body), '#skip' ) != true }}
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
-      - name: New release of ${{ github.repository }} | ${{ github.action_status }}
+      - name: New release
         if: success()
         uses: rjstone/discord-webhook-notify@v1.0.4
         with:
           severity: info
-          details: New release details.
+          details: New Release ${{ github.repository }} | ${{ github.action_status }}
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-      - name: Release with failures of ${{ github.repository }} | ${{ github.action_status }}
+      - name: Release with failures
         if: failure()
         uses: rjstone/discord-webhook-notify@v1
         with:
           severity: error
-          details: Error
+          details: Error deploying ${{ github.repository }} | ${{ github.action_status }}
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
