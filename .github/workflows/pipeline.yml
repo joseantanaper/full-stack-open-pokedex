@@ -55,7 +55,7 @@ jobs:
         run: echo "$GITHUB_CONTEXT"
       - name: Check if SKIP is ok ***
         env:
-          SKIP: ${{ contains( toJson(github.event.pull_request.body), '#skip' ) }}
+          SKIP: ${{ contains( join( toJson(github.event.commits.*.message) ), '#skip' ) }}
         run: echo "$SKIP"
       - name: Commits ***
         env:
