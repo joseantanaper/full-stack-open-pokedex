@@ -9,10 +9,14 @@ on:
       RENDER_API_KEY:
         description: 'RENDER_API_KEY'
         required: true
-      
+      DISCORD_WEBHOOK:
+        description: 'DISCORD_WEBHOOK'
+        required: true
+  
   push:
     branches:
       - master
+
   pull_request:
     branches: [master]
     types: [opened, synchronize]
@@ -41,6 +45,15 @@ jobs:
           start: npm run start-prod
           command: npm run test:e2e
           wait-on: http://localhost:5000
+
+  discord_notifications:
+    name: The job has succeded
+    uses: rjstone/discord-webhook-notify@v1.0.4
+    if: success()
+    with:
+      severity: info
+      details: OK.
+      webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
   github_context:
     if: ${{ contains( toJson(github.event.pull_request.body), '#skip' ) }}
@@ -87,7 +100,7 @@ jobs:
   trigger_deploy:
     if: ${{ contains( toJson(github.event.pull_request.body), '#skip' ) != true }}
     runs-on: ubuntu-20.04
-    needs: [simple_deployment_pipeline]
+    needs: [simple_deployment_pipeline, tag_release]
     steps:
       - uses: actions/checkout@v3
       - name: Trigger deployment
