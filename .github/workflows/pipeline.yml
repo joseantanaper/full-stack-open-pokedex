@@ -72,8 +72,6 @@ jobs:
         env:
           SKIP: ${{ contains( toJson(github.event.pull_request.body), '#skip' ) }}
         run: echo "$SKIP"
-      - name: Testing github context variables
-        run: echo "$SKIP"
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.merge_commit_sha }}
@@ -89,7 +87,7 @@ jobs:
   trigger_deploy:
     if: ${{ contains( toJson(github.event.pull_request.body), '#skip' ) != true }}
     runs-on: ubuntu-20.04
-    needs: [simple_deployment_pipeline]
+    needs: [simple_deployment_pipeline, tag_release]
     steps:
       - uses: actions/checkout@v3
       - name: Trigger deployment
