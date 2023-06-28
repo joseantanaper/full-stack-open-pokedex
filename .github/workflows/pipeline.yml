@@ -117,7 +117,7 @@ jobs:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Release with failures of ${{ github.repository }} | ${{ github.action_status }}
         if: failure() && ${{ contains( toJson(github.event.pull_request.body), '#skip' ) != true }}
-        uses: rjstone/discord-webhook-notify@v1
+        uses: rjstone/discord-webhook-notify@v1.0.4
         with:
           severity: error
           details: Error release - ${{ github.repository }} | ${{ github.action_status }}
