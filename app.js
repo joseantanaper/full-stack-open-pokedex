@@ -11,8 +11,8 @@ app.get('/', (req, res) => {
 })
 
 app.get('/version', (req, res) => {
-  // branch_11.16_40
-  res.send('11.16_40')
+  // branch_11.16_44
+  res.send('11.16_44')
 })
 
 app.get('/health', (req, res) => {
