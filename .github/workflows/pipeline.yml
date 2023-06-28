@@ -72,8 +72,6 @@ jobs:
         env:
           SKIP: ${{ contains( toJson(github.event.pull_request.body), '#skip' ) }}
         run: echo "$SKIP"
-      - name: Testing github context variables
-        run: echo "$SKIP"
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.merge_commit_sha }}
