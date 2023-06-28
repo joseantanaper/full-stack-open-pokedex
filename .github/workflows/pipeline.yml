@@ -20,6 +20,7 @@ on:
 jobs:
 
   simple_deployment_pipeline:
+    if: ${{ contains( toJson(github.event.pull_request.body), '#skip' ) }} 
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
@@ -52,7 +53,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: GitHub context
         env:
-          SKIP: ${{ contains( toJson(github.event.pull_request.body), '#skip' ) == true }} 
+          SKIP: ${{ contains( toJson(github.event.pull_request.body), '#skip' ) }} 
         run: echo "SKIP $SKIP"
 
   test_github_variables:
@@ -64,6 +65,7 @@ jobs:
         run: echo "Yeah, SKIP is true"
 
   tag_release:
+    if: ${{ contains( toJson(github.event.pull_request.body), '#skip' ) }} 
     runs-on: ubuntu-20.04
     permissions:
       contents: write
