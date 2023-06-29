@@ -11,5 +11,5 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Thursday 20:XX Tick
-        if: github.event.schedule != '* 20 * * 4'
+        if: github.event.schedule == '* 20 * * 4'
         run: echo "Thursday 20:XX Tick"
