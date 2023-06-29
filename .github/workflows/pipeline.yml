@@ -55,14 +55,8 @@ jobs:
         env:
           SKIP: ${{ contains( toJson(github.event.pull_request.body), '#skip' ) }}
         run: echo "SKIP $SKIP"
-
-  test_github_variables:
-    if: ${{ contains( toJson(github.event.pull_request.body), '#skip' ) }} 
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v3
-      - name: Check if Skip is true
-        run: echo "Yeah, SKIP is true"
+      - name: Oh yeah
+        run: echo "${{ github.ref }} ; ${{ github.action }} ; ${{ github.head_ref }} ; ${{ github.repository }}"
 
   tag_release:
     if: ${{ contains( toJson(github.event.pull_request.body), '#skip' ) != true }}
@@ -97,17 +91,14 @@ jobs:
       - name: Trigger deployment
         if: ${{ github.event_name == 'push' }} && ${{ contains( toJson(github.event.pull_request.body), '#skip' ) != true }}
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
-      - name: New Release
-        if: ${{ success() }}
-        uses: rjstone/discord-webhook-notify@v1.0.4
-        with:
-          severity: info
-          details: New release details - ${{ github.repository }} | ${{ github.action_status }}
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-      - name: Release with errors
-        if: ${{ failure() }}
-        uses: rjstone/discord-webhook-notify@v1.0.4
-        with:
-          severity: error
-          details: Release with errors - ${{ github.repository }} | ${{ github.action_status }}
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+  discord_notifications:
+    if: ${{ success() && github.event_name == 'push' }}
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Release with errors
+      uses: rjstone/discord-webhook-notify@v1.0.4
+      with:
+        severity: error
+        details: Release with errors - ${{ github.repository }} | ${{ github.action_status }}
+        webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
