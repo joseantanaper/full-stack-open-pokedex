@@ -100,12 +100,12 @@ jobs:
       uses: rjstone/discord-webhook-notify@v1.0.4
       with:
         severity: info
-        details: New Release! - ${{ github.repository }} | ${{ github.action_status }} | ${{ github.event_name }}
+        details: New Release! - ${{ github.repository }}
         webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
     - name: BadRelease
-      if: ${{ failure() }}
+      if: ${{ github.event_name == 'push' && failure() }}
       uses: rjstone/discord-webhook-notify@v1.0.4
       with:
         severity: error
-        details: Bad Release - ${{ github.repository }} | ${{ github.action_status }} | ${{ github.event_name }}
+        details: Bad Release - ${{ github.repository }}
         webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
