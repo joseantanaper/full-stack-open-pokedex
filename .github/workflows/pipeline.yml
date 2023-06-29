@@ -100,7 +100,7 @@ jobs:
       uses: rjstone/discord-webhook-notify@v1.0.4
       with:
         severity: success
-        details: New Release - ${{ github.repository }} | ${{ github.action_status }} | ${{ github.event_name }}
+        details: New Release! - ${{ github.repository }} | ${{ github.action_status }} | ${{ github.event_name }}
         webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
     - name: BadRelease
       if: ${{ failure() }}
