@@ -96,11 +96,11 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - name: NewRelease
-      if: ${{ success() }}
+      if: ${{ github.event_name == 'push' && success() }}
       uses: rjstone/discord-webhook-notify@v1.0.4
       with:
-        severity: success
-        details: New Release - ${{ github.repository }} | ${{ github.action_status }} | ${{ github.event_name }}
+        severity: info
+        details: New Release! - ${{ github.repository }} | ${{ github.action_status }} | ${{ github.event_name }}
         webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
     - name: BadRelease
       if: ${{ failure() }}
